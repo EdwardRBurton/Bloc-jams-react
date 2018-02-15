@@ -12,12 +12,44 @@ class Album extends Component {
      });
 
      this.state = {
-       album: album
+       album: album,
+       currentSong: album.songs[0],
+       isPlaying: false
      };
+
+     this.audioElement = document.createElement('audio');
+     this.audioElement.src = album.songs[0].audioSrc;
   }
 
+  play() {
+     this.audioElement.play();
+     this.setState({ isPlaying: true });
+   }
+
+   pause() {
+     this.audioElement.pause();
+     this.setState({ isPlaying: false });
+   }
+
+   setSong(song) {
+     this.audioElement.src = song.audioSrc;
+     this.setState({ currentSong: song });
+   }
+
+   handleSongClick(song) {
+    const isSameSong = this.state.currentSong === song;
+    if (this.state.isPlaying && isSameSong) {
+      this.pause();
+    } else {
+      if( !isSameSong ) { this.setSong(song); }
+      this.play();
+    }
+}
+
+
   render() {
-    return (<section className="album">
+    return (
+      <section className="album">
         <section id="album-info">
            <img id="album-cover-art" src={this.state.album.albumCover} />
            <div className="album-details">
@@ -35,7 +67,7 @@ class Album extends Component {
             <tbody>
                 {
                   this.state.album.songs.map( (album, index) =>
-                    <tr>
+                    <tr className="song" key={index} onClick={() => this.handleSongClick(this.song)} >
                       <td className="ion-play"></td>
                       <td id="song-number"> {index + 1} </td>
                       <td id="song-title"> {this.state.album.songs[index].title}</td>
