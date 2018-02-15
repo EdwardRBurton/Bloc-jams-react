@@ -1,5 +1,6 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
-
+.tags
+.tags_swap
 # dependencies
 /node_modules
 
@@ -15,8 +16,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.tags
-.tags_swap
+
 
 npm-debug.log*
 yarn-debug.log*
