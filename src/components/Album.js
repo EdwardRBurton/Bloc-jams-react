@@ -87,12 +87,28 @@ class Album extends Component {
       const newSong = this.state.album.songs[newIndex];
       this.setSong(newSong);
       this.play(newSong);
+      if(currentIndex > this.state.album.songs.length){
+        this.play(newSong);
+      }
     }
 
     handleTimeChange(e) {
       const newTime = this.audioElement.duration * e.target.value;
       this.audioElement.currentTime = newTime;
       this.setState({ currentTime: newTime });
+    }
+
+    formatTime(seconds) {
+      if (isNaN(seconds)) { return "-:--"; }
+      const wholeSeconds = Math.floor(seconds);
+      const minutes = Math.floor(wholeSeconds / 60);
+      const remainingSeconds = wholeSeconds % 60;
+      let output = minutes + ':';
+      if (remainingSeconds < 10) {
+        output += '0';
+      }
+      output += remainingSeconds;
+      return output;
     }
 
 
@@ -120,7 +136,7 @@ class Album extends Component {
                       <td className="ion-play"></td>
                       <td id="song-number"> {index + 1} </td>
                       <td id="song-title"> {this.state.album.songs[index].title}</td>
-                      <td id="song-duration"> {this.state.album.songs[index].duration}</td>
+                      <td id="song-duration"> {this.formatTime(song.duration)}</td>
                     </tr>
                   )
                 }
@@ -135,6 +151,7 @@ class Album extends Component {
            handlePrevClick={() => this.handlePrevClick()}
            handleNextClick={() => this.handleNextClick()}
            handleTimeChange={(e) => this.handleTimeChange(e)}
+           formatTime={(e) => this.formatTime(e)}
          />
     </section>);
   }
